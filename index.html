@@ -4,18 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Undangan Untukmu</title>
+<meta property="og:title" content="Undangan Untukmu dari sdev">
+<meta property="og:description" content="Ada sesuatu yang mau aku bilang...">
+<meta property="og:image" content="images.jpeg">
 
 <!-- AOS Animation -->
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
   body, html {
     height: 100%;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    background: url('images.jpeg') no-repeat center/cover;
     overflow: hidden;
     color: #fff;
   }
-  .page {
+  body::before { /* Overlay biar teks kebaca */
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(2px);
+  }
+ .page {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -24,59 +35,72 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 20px;
+    padding: 25px;
     opacity: 0;
     transition: opacity 0.8s ease;
-    background: rgba(0,0,0,0.1);
+    z-index: 1;
   }
-  .page.active { opacity: 1; z-index: 2; }
-  
-  h1 { font-size: 2.2rem; margin-bottom: 15px; font-weight: 600; }
-  p { font-size: 1.1rem; line-height: 1.8; max-width: 400px; }
-  
-  .btn {
+ .page.active { opacity: 1; z-index: 2; }
+
+  h1 { font-size: 2.1rem; margin-bottom: 20px; font-weight: 600; }
+  p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    max-width: 420px;
+    min-height: 120px; /* Biar gak loncat pas ngetik */
+  }
+ .cursor { border-right: 2px solid #fff; animation: blink 0.7s infinite; }
+  @keyframes blink { 50% { border-color: transparent; } }
+
+ .btn {
     margin-top: 25px;
     padding: 12px 28px;
-    border: none;
+    border: 1.5px solid #fff;
     border-radius: 50px;
-    background: #fff;
-    color: #ff5e62;
+    background: transparent;
+    color: #fff;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.3s;
     font-size: 1rem;
+    backdrop-filter: blur(4px);
   }
-  .btn:hover { transform: scale(1.05); }
+ .btn:hover { background: #fff; color: #ff5e62; }
 
   /* Halaman 4 tombol */
-  .btn-group { position: relative; width: 250px; height: 60px; margin-top: 20px; }
+ .btn-group { position: relative; width: 260px; height: 60px; margin-top: 20px; }
   #btnMau, #btnTidak {
     position: absolute;
     padding: 12px 24px;
-    border: none;
+    border: 1.5px solid #fff;
     border-radius: 50px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    background: transparent;
+    color: #fff;
   }
-  #btnMau { background: #fff; color: #ff5e62; left: 0; }
-  #btnTidak { background: #fff; color: #555; right: 0; }
+  #btnMau { left: 0; }
+  #btnMau:hover { background: #fff; color: #ff5e62; }
+  #btnTidak { right: 0; }
 
   /* Copyright */
-  .copyright {
+ .copyright {
     position: absolute;
-    bottom: 10px;
-    font-size: 12px;
-    opacity: 0.4;
+    bottom: 12px;
+    font-size: 11px;
+    opacity: 0.3;
+    z-index: 3;
   }
 
   /* Hati jatuh */
-  .heart {
+ .heart {
     position: fixed;
     top: -10px;
     font-size: 20px;
-    color: #fff;
+    color: #ffb6c1;
     animation: fall 4s linear forwards;
+    z-index: 3;
   }
   @keyframes fall {
     to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
@@ -85,41 +109,36 @@
 </head>
 <body>
 
-<!-- Musik Romantis Instrumental -->
+<!-- Musik Romantis dari repo -->
 <audio id="bgm" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/08/04/audio_7b8f8e7b3b.mp3" type="audio/mpeg">
+  <source src="lagu.mp3" type="audio/mpeg">
 </audio>
 
 <!-- Halaman 1 -->
 <div class="page active" id="page1">
   <h1 data-aos="fade-down">Buka Undangan Untukmu</h1>
-  <p data-aos="fade-up" data-aos-delay="300">Ada sesuatu yang mau aku bilang...</p>
-  <button class="btn" onclick="nextPage(2)" data-aos="zoom-in" data-aos-delay="600">Buka</button>
+  <p id="text1"></p>
+  <button class="btn" onclick="nextPage(2)" data-aos="zoom-in" data-aos-delay="500">Buka</button>
 </div>
 
 <!-- Halaman 2 -->
 <div class="page" id="page2">
-  <h1 data-aos="fade-down">Hai Kamu</h1>
-  <p data-aos="fade-up" data-aos-delay="300">
-    Sejak kenal kamu, dunianya jadi lebih tenang. 
-    Kamu itu rumah paling nyaman yang gak sengaja aku temuin.
-  </p>
-  <button class="btn" onclick="nextPage(3)" data-aos="fade-up" data-aos-delay="600">Lanjut</button>
+  <h1 data-aos="fade-down">Untuk Kamu</h1>
+  <p id="text2"></p>
+  <button class="btn" onclick="nextPage(3)" data-aos="fade-up" data-aos-delay="500">Lanjut</button>
 </div>
 
 <!-- Halaman 3 -->
 <div class="page" id="page3">
-  <h1 data-aos="fade-down">Jadi...</h1>
-  <p data-aos="fade-up" data-aos-delay="300">
-    Aku gak janji yang muluk-muluk. 
-    Aku cuma janji mau terus pilih kamu, setiap hari.
-  </p>
-  <button class="btn" onclick="nextPage(4)" data-aos="fade-up" data-aos-delay="600">Terakhir</button>
+  <h1 data-aos="fade-down">Dengarkan Ini</h1>
+  <p id="text3"></p>
+  <button class="btn" onclick="nextPage(4)" data-aos="fade-up" data-aos-delay="500">Terakhir</button>
 </div>
 
 <!-- Halaman 4 -->
 <div class="page" id="page4">
-  <h1 data-aos="zoom-in">Mau gak jadi milikku?</h1>
+  <h1 data-aos="zoom-in">Jadi, Bagaimana?</h1>
+  <p id="text4"></p>
   <div class="btn-group" data-aos="fade-up" data-aos-delay="300">
     <button id="btnMau" onclick="kirimWA()">Mau</button>
     <button id="btnTidak">Tidak</button>
@@ -130,35 +149,72 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
   AOS.init({ duration: 1000, once: true });
+  let typing = false;
 
   // Play musik pas klik pertama kali
   document.body.addEventListener('click', () => {
     document.getElementById('bgm').play().catch(()=>{});
   }, { once: true });
 
+  const texts = {
+    1: "Aku gak tau harus mulai dari mana... Tapi setiap aku scroll HP dan nemu foto kamu, rasanya hari yang capek jadi agak ringan. Kamu itu ketenangan yang gak sengaja aku temuin.",
+    2: "Kenal kamu bikin aku percaya lagi kalau ada orang yang bisa bikin kita betah cuma dari cara dia bicara, cara dia ketawa, sama cara dia bikin aku ngerasa cukup. Tanpa drama, tanpa maksa.",
+    3: "Aku bukan orang yang gampang bilang suka. Karena buat aku, cinta itu rumah. Dan aku gak mau bangun rumah di tempat yang salah. Tapi sama kamu... aku mau coba pelan-pelan.",
+    4: "Jadi aku gak akan nanya 'kamu suka aku gak?'. Aku mau nanya yang lebih jujur... 'Mau gak kita jalan bareng? Gak usah buru-buru. Cukup kamu, dan aku.'"
+  };
+
+  function typeWriter(id, text, speed = 35) {
+    const el = document.getElementById(id);
+    el.innerHTML = "";
+    let i = 0;
+    typing = true;
+    function type() {
+      if (i < text.length) {
+        el.innerHTML = text.substring(0, i+1) + '<span class="cursor"></span>';
+        i++;
+        setTimeout(type, speed);
+      } else {
+        el.innerHTML = text;
+        typing = false;
+      }
+    }
+    type();
+  }
+
   function nextPage(n) {
+    if(typing) return; // Cegah skip pas lagi ngetik
     document.querySelector('.page.active').classList.remove('active');
     document.getElementById('page' + n).classList.add('active');
+    typeWriter('text' + n, texts[n]);
     bikinHati();
   }
+
+  // Auto ketik halaman 1 pas load
+  window.onload = () => typeWriter('text1', texts[1]);
 
   // Tombol Tidak kabur
   const btnTidak = document.getElementById('btnTidak');
   btnTidak.addEventListener('mouseover', () => {
-    const x = Math.random() * (window.innerWidth - 100);
-    const y = Math.random() * (window.innerHeight - 100);
+    const x = Math.random() * (window.innerWidth - 120);
+    const y = Math.random() * (window.innerHeight - 120);
     btnTidak.style.left = x + 'px';
     btnTidak.style.top = y + 'px';
+    btnTidak.style.position = 'fixed';
   });
 
-  // Tombol Mau -> WA
+  // Tombol Mau -> WA pakai meta whatsapp://
   function kirimWA() {
-    window.location.href = 'https://wa.me/62895351432524?text=Aku%20mau%20ya%20%F0%9F%98%8D';
+    const pesan = encodeURIComponent("Aku mau ya 😍 Kita jalanin pelan-pelan");
+    window.location.href = `whatsapp://send?phone=62895351432524&text=${pesan}`;
+    // Fallback kalo WA app gak ada
+    setTimeout(() => {
+      window.location.href = `https://wa.me/62895351432524?text=${pesan}`;
+    }, 500);
   }
 
   // Efek hati jatuh
   function bikinHati() {
-    for(let i=0; i<15; i++){
+    for(let i=0; i<12; i++){
       setTimeout(() => {
         const heart = document.createElement('div');
         heart.classList.add('heart');
@@ -166,9 +222,9 @@
         heart.style.left = Math.random() * 100 + 'vw';
         document.body.appendChild(heart);
         setTimeout(() => heart.remove(), 4000);
-      }, i * 100);
+      }, i * 120);
     }
   }
 </script>
 </body>
-</html>
+   </html>
