@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Untukmu</title>
+
+<!-- AOS Animation -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+  body, html {
+    height: 100%;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    overflow: hidden;
+    color: #fff;
+  }
+  .page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    background: rgba(0,0,0,0.1);
+  }
+  .page.active { opacity: 1; z-index: 2; }
+  
+  h1 { font-size: 2.2rem; margin-bottom: 15px; font-weight: 600; }
+  p { font-size: 1.1rem; line-height: 1.8; max-width: 400px; }
+  
+  .btn {
+    margin-top: 25px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    background: #fff;
+    color: #ff5e62;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-size: 1rem;
+  }
+  .btn:hover { transform: scale(1.05); }
+
+  /* Halaman 4 tombol */
+  .btn-group { position: relative; width: 250px; height: 60px; margin-top: 20px; }
+  #btnMau, #btnTidak {
+    position: absolute;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  #btnMau { background: #fff; color: #ff5e62; left: 0; }
+  #btnTidak { background: #fff; color: #555; right: 0; }
+
+  /* Copyright */
+  .copyright {
+    position: absolute;
+    bottom: 10px;
+    font-size: 12px;
+    opacity: 0.4;
+  }
+
+  /* Hati jatuh */
+  .heart {
+    position: fixed;
+    top: -10px;
+    font-size: 20px;
+    color: #fff;
+    animation: fall 4s linear forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Musik Romantis Instrumental -->
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/08/04/audio_7b8f8e7b3b.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Halaman 1 -->
+<div class="page active" id="page1">
+  <h1 data-aos="fade-down">Buka Undangan Untukmu</h1>
+  <p data-aos="fade-up" data-aos-delay="300">Ada sesuatu yang mau aku bilang...</p>
+  <button class="btn" onclick="nextPage(2)" data-aos="zoom-in" data-aos-delay="600">Buka</button>
+</div>
+
+<!-- Halaman 2 -->
+<div class="page" id="page2">
+  <h1 data-aos="fade-down">Hai Kamu</h1>
+  <p data-aos="fade-up" data-aos-delay="300">
+    Sejak kenal kamu, dunianya jadi lebih tenang. 
+    Kamu itu rumah paling nyaman yang gak sengaja aku temuin.
+  </p>
+  <button class="btn" onclick="nextPage(3)" data-aos="fade-up" data-aos-delay="600">Lanjut</button>
+</div>
+
+<!-- Halaman 3 -->
+<div class="page" id="page3">
+  <h1 data-aos="fade-down">Jadi...</h1>
+  <p data-aos="fade-up" data-aos-delay="300">
+    Aku gak janji yang muluk-muluk. 
+    Aku cuma janji mau terus pilih kamu, setiap hari.
+  </p>
+  <button class="btn" onclick="nextPage(4)" data-aos="fade-up" data-aos-delay="600">Terakhir</button>
+</div>
+
+<!-- Halaman 4 -->
+<div class="page" id="page4">
+  <h1 data-aos="zoom-in">Mau gak jadi milikku?</h1>
+  <div class="btn-group" data-aos="fade-up" data-aos-delay="300">
+    <button id="btnMau" onclick="kirimWA()">Mau</button>
+    <button id="btnTidak">Tidak</button>
+  </div>
+  <div class="copyright">© sdev</div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 1000, once: true });
+
+  // Play musik pas klik pertama kali
+  document.body.addEventListener('click', () => {
+    document.getElementById('bgm').play().catch(()=>{});
+  }, { once: true });
+
+  function nextPage(n) {
+    document.querySelector('.page.active').classList.remove('active');
+    document.getElementById('page' + n).classList.add('active');
+    bikinHati();
+  }
+
+  // Tombol Tidak kabur
+  const btnTidak = document.getElementById('btnTidak');
+  btnTidak.addEventListener('mouseover', () => {
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 100);
+    btnTidak.style.left = x + 'px';
+    btnTidak.style.top = y + 'px';
+  });
+
+  // Tombol Mau -> WA
+  function kirimWA() {
+    window.location.href = 'https://wa.me/62895351432524?text=Aku%20mau%20ya%20%F0%9F%98%8D';
+  }
+
+  // Efek hati jatuh
+  function bikinHati() {
+    for(let i=0; i<15; i++){
+      setTimeout(() => {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 100 + 'vw';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+      }, i * 100);
+    }
+  }
+</script>
+</body>
+</html>
