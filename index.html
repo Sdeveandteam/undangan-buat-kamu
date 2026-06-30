@@ -6,7 +6,7 @@
 <title>Undangan Untukmu</title>
 <meta property="og:title" content="Undangan Untukmu dari sdev">
 <meta property="og:description" content="Ada sesuatu yang mau aku bilang...">
-<meta property="og:image" content="images.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Sdeveandteam/undangan-buat-kamu/main/images.jpeg">
 
 <!-- AOS Animation -->
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -15,7 +15,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
   body, html {
     height: 100%;
-    background: url('images.jpeg') no-repeat center/cover;
+    background: url('https://raw.githubusercontent.com/Sdeveandteam/undangan-buat-kamu/main/images.jpeg') no-repeat center/cover fixed;
     overflow: hidden;
     color: #fff;
   }
@@ -23,10 +23,10 @@
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.55);
-    backdrop-filter: blur(2px);
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(3px);
   }
- .page {
+.page {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -40,35 +40,36 @@
     transition: opacity 0.8s ease;
     z-index: 1;
   }
- .page.active { opacity: 1; z-index: 2; }
+.page.active { opacity: 1; z-index: 2; }
 
-  h1 { font-size: 2.1rem; margin-bottom: 20px; font-weight: 600; }
+  h1 { font-size: 2.1rem; margin-bottom: 20px; font-weight: 600; text-shadow: 0 2px 10px #000; }
   p {
     font-size: 1.05rem;
     line-height: 1.9;
     max-width: 420px;
-    min-height: 120px; /* Biar gak loncat pas ngetik */
+    min-height: 130px; /* Biar gak loncat pas ngetik */
+    text-shadow: 0 1px 6px #000;
   }
- .cursor { border-right: 2px solid #fff; animation: blink 0.7s infinite; }
+.cursor { border-right: 2px solid #fff; animation: blink 0.7s infinite; }
   @keyframes blink { 50% { border-color: transparent; } }
 
- .btn {
+.btn {
     margin-top: 25px;
     padding: 12px 28px;
     border: 1.5px solid #fff;
     border-radius: 50px;
-    background: transparent;
+    background: rgba(255,255,255,0.1);
     color: #fff;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s;
     font-size: 1rem;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
   }
- .btn:hover { background: #fff; color: #ff5e62; }
+.btn:hover { background: #fff; color: #ff5e62; }
 
   /* Halaman 4 tombol */
- .btn-group { position: relative; width: 260px; height: 60px; margin-top: 20px; }
+.btn-group { position: relative; width: 260px; height: 60px; margin-top: 20px; }
   #btnMau, #btnTidak {
     position: absolute;
     padding: 12px 24px;
@@ -77,15 +78,15 @@
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: transparent;
+    background: rgba(255,255,255,0.1);
     color: #fff;
+    backdrop-filter: blur(6px);
   }
   #btnMau { left: 0; }
   #btnMau:hover { background: #fff; color: #ff5e62; }
   #btnTidak { right: 0; }
 
-  /* Copyright */
- .copyright {
+.copyright {
     position: absolute;
     bottom: 12px;
     font-size: 11px;
@@ -93,8 +94,7 @@
     z-index: 3;
   }
 
-  /* Hati jatuh */
- .heart {
+.heart {
     position: fixed;
     top: -10px;
     font-size: 20px;
@@ -109,9 +109,9 @@
 </head>
 <body>
 
-<!-- Musik Romantis dari repo -->
-<audio id="bgm" loop>
-  <source src="lagu.mp3" type="audio/mpeg">
+<!-- Musik dari repo lu -->
+<audio id="bgm" loop preload="auto">
+  <source src="https://raw.githubusercontent.com/Sdeveandteam/undangan-buat-kamu/main/lagu.mp3" type="audio/mpeg">
 </audio>
 
 <!-- Halaman 1 -->
@@ -151,7 +151,7 @@
   AOS.init({ duration: 1000, once: true });
   let typing = false;
 
-  // Play musik pas klik pertama kali
+  // Play musik pas klik pertama kali biar gak keblock browser
   document.body.addEventListener('click', () => {
     document.getElementById('bgm').play().catch(()=>{});
   }, { once: true });
@@ -182,17 +182,15 @@
   }
 
   function nextPage(n) {
-    if(typing) return; // Cegah skip pas lagi ngetik
+    if(typing) return;
     document.querySelector('.page.active').classList.remove('active');
     document.getElementById('page' + n).classList.add('active');
     typeWriter('text' + n, texts[n]);
     bikinHati();
   }
 
-  // Auto ketik halaman 1 pas load
   window.onload = () => typeWriter('text1', texts[1]);
 
-  // Tombol Tidak kabur
   const btnTidak = document.getElementById('btnTidak');
   btnTidak.addEventListener('mouseover', () => {
     const x = Math.random() * (window.innerWidth - 120);
@@ -202,17 +200,14 @@
     btnTidak.style.position = 'fixed';
   });
 
-  // Tombol Mau -> WA pakai meta whatsapp://
   function kirimWA() {
     const pesan = encodeURIComponent("Aku mau ya 😍 Kita jalanin pelan-pelan");
     window.location.href = `whatsapp://send?phone=62895351432524&text=${pesan}`;
-    // Fallback kalo WA app gak ada
     setTimeout(() => {
       window.location.href = `https://wa.me/62895351432524?text=${pesan}`;
-    }, 500);
+    }, 600);
   }
 
-  // Efek hati jatuh
   function bikinHati() {
     for(let i=0; i<12; i++){
       setTimeout(() => {
@@ -227,4 +222,4 @@
   }
 </script>
 </body>
-   </html>
+  </html>
